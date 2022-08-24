@@ -1,0 +1,42 @@
+<section>
+  <div class="container mt-4">
+
+    <a href="/admin/admin-addUser"> <button class="btn btn-outline-success mb-4
+        ">Add New User </button> </a>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">User ID</th>
+          <th scope="col">First Name</th>
+          <th scope="col">Second Name</th>
+          <th scope="col">&nbsp;&nbsp;&nbsp;Manage User</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {{#each users}}
+        <tr>
+          <th scope="row">1</th>
+          <td>{{this.userName}}</td>
+          <td>{{this.firstName}}</td>
+          <td>{{this.lastName}}</td>
+
+          {{!-- <form action="/admin/userDelete" method="post"> --}}
+            <td>
+
+              <a href='/admin/edit-user/{{this._id}}' class="btn btn-secondary ms-2" onclick="return 
+              confirm('Are you Sure want to edit {{this._userName}}?')">Edit</a>
+
+              <a href="/admin/delete-user/{{ this._id}}" class="btn btn-danger"
+                onclick="return confirm('Are you Sure want to
+                delete {{this.userName}}?')">Remove</a>
+            </td>
+            {{!-- </form> --}}
+  
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</section>

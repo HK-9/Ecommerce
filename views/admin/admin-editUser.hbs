@@ -1,0 +1,47 @@
+
+{{!-- products section --}}
+
+<section>
+<div>
+        {{!-- <h1 class="fw-bold mb-2 text-uppercase text-center">Admin Panel</h1>
+        --}}
+        <div class="row d-flex justify-content-left align-items-center h-100">
+            <div class="col-12 col-md-6 col-lg-6 col-xl-5 col-md-6 ml-4">
+                <div class="card bg-light text-black" style="border-radius:
+                    0rem;">
+
+                    <div class="card-body p-5 text-left">
+                        <div class="mb-md-5 mt-md-4 pb-5">
+
+                            <h2 class="fw-bold mb-2  mb-5"> Edit
+                                User</h2>
+                            {{!-- <p class="text-white-50 mb-5">Please enter
+                                your
+                                login and password!</p> --}}
+                            <form action="/admin/admin-updateUser/{{avatar._id}}"
+                                method="post">
+                                <div class="form-outline form-white mb-4">
+                                    <label class="form-label text-black" for="typeEmailX">User ID</label>
+                                    <input type="text" class="form-control form-control-lg" name="userName" value="{{avatar.userName}}" />
+                                </div>
+
+                                <div class="form-outline form-white mb-4">
+                                    <label class="form-label text-black"
+                                        for="typePasswordX">First Name</label>
+                                    <input type="text" 
+                                        class="form-control form-control-lg"
+                                        name="firstName" value="{{avatar.firstName}}"/>
+
+                                </div>
+                                <div class="form-outline form-white mb-4">
+                                    <label class="form-label text-black"
+                                        for="typePasswordX">Second Name</label>
+                                    <input type="text"
+                                        class="form-control form-control-lg"
+                                        name="lastName" value="{{avatar.lastName}}"/>
+
+                                </div>
+                              <button type="submit" class="btn btn-success mt5">Submit</button>
+
+                                </div>
+                            </form>
