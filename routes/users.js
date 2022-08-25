@@ -6,14 +6,36 @@ var userHelpers=require('../helpers/users-helper')
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   // res.send('Welcome to loginpage');
-  res.render('users/login',{admin:true})
-});
-router.get('/login',(req,res)=>{
-  res.redirect('/')
+  if(req.session.userLoggedIn){
+  res.render ('users/products-page',{products,admin:true})
+  }
+  else{
+    res.render ('users/login')
+  }
+
+  
+
 })
 
 
-router.post('/products',(req,res,next)=>{     //login btn action
+router.post('/login',(req,res,next)=>{ 
+  userHelpers.login(req.body).then((response)=>{
+    if(response.status){
+      req.session.userLoggedIn=true;
+      req.session.user=response.user
+      console.log("log data" +req.session.user);
+      res.redirect('/')
+    }else{
+      req.session.err=true
+      res.redirect('/')
+    }
+  
+  })
+})
+  
+  
+  
+      //login btn action
   const products=[ 
     {
             name:'Samsung Galaxy S22 Plus',
@@ -41,32 +63,6 @@ router.post('/products',(req,res,next)=>{     //login btn action
 
 ]
 
-// userHelpers.login(req.body).then((response)=>{
-//   console.log(response)
-//   if(response.userState){
-//     res.render('users/products-page',{products,admin:true})
-
-//   }else{
-//     res.redirect('/')
-//   }
-
-// })
-userHelpers.login(req.body).then((response)=>{
-  if(response.status){
-    res.render ('users/products-page',{products,admin:true})
-  }else{
-    res.redirect('/')
-  }
-
-})
-
-
-})
-
-//logut-btn
-router.use('/logout',(req,res,next)=>{
-  res.redirect('/')
-})
 
 
 //signup
@@ -82,6 +78,11 @@ router.post('/signup',(req,res)=>{
   })
 })
 
+
+router.get('/logout', function(req, res, next) {
+  req.session.userLoggedIn=false
+  res.redirect('/')
+});
 
 
 module.exports = router;

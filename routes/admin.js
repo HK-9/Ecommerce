@@ -7,31 +7,38 @@ var userHelper = require("../helpers/users-helper");
 var router = express.Router();
 var MongoClient = require("mongodb").MongoClient;
 
+const userAuth={
+  username:"admin",
+  password:1234
 
+}
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  res.render("admin/admin-login");
+  if(req.session.adminLoggedIn){
+    userHelper.getAllUsers().then((users) => {
+      console.log(users);
+      res.render("admin/admin-usersPanel", { users });
+      console.log(req.body);
+    });
+  }else{
+    res.render("admin/admin-login");
+  }
 });
 
-router.post("/addUser", (req, res, next) => {
-  res.render("admin/admin-usersPanel"); //admin-login page router
-});
-//add user bn
+router.post('/admin-login',(req,res,next)=>{
 
-//router.post("/admin-usersPanel", function (req, res, next) {
-  
-// });
+  if(req.body.username==userAuth.username && req.body.password==userAuth.password){
+    req.session.adminLoggedIn=true;
+    res.redirect('/admin')
+  }else{
+    res.redirect('/admin')
+  }
+})
+
+
 
 router.post("/", (req, res) => {
   res.redirect("/admin/usersPanel");
-});
-
-router.get("/usersPanel", (req, res) => {
-  userHelper.getAllUsers().then((users) => {
-    console.log(users);
-    res.render("admin/admin-usersPanel", { users });
-    console.log(req.body);
-  });
 });
 
 router.get("/delete-user/:id", (req, res) => {  //DELETE USER
@@ -63,12 +70,18 @@ router.get("/admin-addUser", (req, res, next) => {
 router.post("/admin-submitUser", (req, res, next) => {
   userHelper.doSignup(req.body).then((resonse) => {
     console.log(resonse);
-    res.redirect("/admin/admin-addUser");
+    res.redirect("/admin/usersPanel");
   });
 });
 //go back to users pannel
 router.get("/admin/admin-usersPanel", (req, res) => {
   res.redirect("admin/admin-usersPanel",{user});
+});
+
+
+router.get('/adminlogout', function(req, res, next) {
+  req.session.adminLoggedIn=false;
+  res.redirect('/admin')
 });
 
 

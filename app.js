@@ -29,14 +29,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-const oneDay = 1000 * 60 * 60 * 24;
-app.use(sessions({
-    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
-    saveUninitialized:true,                           //session
-    cookie: { maxAge: oneDay },
-    resave: false 
-}));
+app.use(sessions({secret:'Key',cookie:{maxAge:60000}}))
+app.use(function(req, res, next) {
+  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+  next();
+});
+// const oneDay = 1000 * 60 * 60 * 24;
+// app.use(sessions({
+//     secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+//     saveUninitialized:true,                           //session
+//     cookie: { maxAge: oneDay },
+//     resave: false 
+// }));
 
 db.connect((err)=>{                                   //Database
   if(err)
