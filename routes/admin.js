@@ -1,5 +1,6 @@
 const { Router } = require("express");
 var express = require("express");
+const session = require("express-session");
 
 const { getAllProducts, getAllUsers } = require("../helpers/users-helper");
 // const { render } = require('../app');
@@ -17,11 +18,13 @@ router.get("/", function (req, res, next) {
   if(req.session.adminLoggedIn){
     userHelper.getAllUsers().then((users) => {
       console.log(users);
-      res.render("admin/admin-usersPanel", { users });
+      res.render("admin/admin-usersPanel", { users});
       console.log(req.body);
     });
   }else{
-    res.render("admin/admin-login");
+    
+    res.render("admin/admin-login",{loginError:req.session.loginError});
+    req.session.loginError=true;
   }
 });
 
@@ -41,10 +44,12 @@ router.post("/", (req, res) => {
   res.redirect("/admin/usersPanel");
 });
 
-router.get("/delete-user/:id", (req, res) => {  //DELETE USER
+router.get("/delete-user/:id", (req, res) => {
   let userId = req.params.id;
   userHelper.deleteUser(userId).then((response) => {
-    res.redirect("/admin/usersPanel");  
+    if(req.session.adminLoggedIn){
+    res.redirect("/admin");  
+    }
   });
 });
 
@@ -56,7 +61,9 @@ router.get("/edit-user/:id",async(req,res)=>{       //EDIT USER
 
 router.post("/admin-updateUser/:id",(req,res)=>{ 
     userHelper.updateUser(req.params.id,req.body).then(()=>{
-      res.redirect('/admin/usersPanel')
+      if(req.session.adminLoggedIn){
+      res.redirect('/admin')
+      }
     })
 })
 router.get('/add/goback'),(req,res)=>{
@@ -70,7 +77,9 @@ router.get("/admin-addUser", (req, res, next) => {
 router.post("/admin-submitUser", (req, res, next) => {
   userHelper.doSignup(req.body).then((resonse) => {
     console.log(resonse);
-    res.redirect("/admin/usersPanel");
+    if(req.session.adminLoggedIn){
+    res.redirect("/admin");
+    }
   });
 });
 //go back to users pannel
@@ -80,7 +89,7 @@ router.get("/admin/admin-usersPanel", (req, res) => {
 
 
 router.get('/adminlogout', function(req, res, next) {
-  req.session.adminLoggedIn=false;
+  req.session.adminLoggedIn=false
   res.redirect('/admin')
 });
 

@@ -10,7 +10,8 @@ router.get('/', function(req, res, next) {
   res.render ('users/products-page',{products,admin:true})
   }
   else{
-    res.render ('users/login')
+    res.render ('users/login',{admin:true,loginError:req.session.loginError})
+    req.session.loginError=true;
   }
 
   

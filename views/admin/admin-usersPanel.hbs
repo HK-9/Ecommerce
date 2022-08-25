@@ -3,21 +3,21 @@
 
     <a href="/admin/admin-addUser"> <button class="btn btn-outline-success mb-4
         ">Add New User </button> </a>
-    <table class="table">
+    <table class="table" id="usersTable" calss="desplay">
       <thead>
         <tr>
           <th scope="col">#</th>
           <th scope="col">User ID</th>
           <th scope="col">First Name</th>
           <th scope="col">Second Name</th>
-          <th scope="col">&nbsp;&nbsp;&nbsp;Manage User</th>
+          <th scope="'col">Options</th>
         </tr>
       </thead>
       <tbody>
 
         {{#each users}}
         <tr>
-          <th scope="row">1</th>
+          <th scope="row">></th>
           <td>{{this.userName}}</td>
           <td>{{this.firstName}}</td>
           <td>{{this.lastName}}</td>
@@ -40,3 +40,8 @@
     </table>
   </div>
 </section>
+<script>
+  $(document).ready( function () {
+    $('usersTable').DataTable();
+} );
+</script>
