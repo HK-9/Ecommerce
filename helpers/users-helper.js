@@ -22,8 +22,11 @@ module.exports={
     // },
     login:(body)=>{                                                         //loginpage validation
         return new Promise(async(resolve,reject)=>{
-            let loginstatus=false
-            let response={}
+            let response={
+            //     user: null,
+            //  loginstatus:false
+
+            }
             let user=await db.get().collection(collection.USERS_COLLECTTION).findOne({userName:body.username})
             if(user){
                 bcrypt.compare(body.password,user.password).then((status)=>{
@@ -33,10 +36,16 @@ module.exports={
                         response.status=true
                         resolve(response)
                     }else{
-                        console.log('login failed');
-                        resolve({status:false})
+                        console.log('password failed');
+                        response.status = false;
+                        resolve(response);
                     }
                 })
+            }else{
+                console.log('user not');
+                response.status = false;
+                resolve(response);
+
             }
         })
     },

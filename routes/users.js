@@ -11,22 +11,22 @@ router.get('/', function(req, res, next) {
   }
   else{
     res.render ('users/login',{admin:true,loginError:req.session.loginError})
-    req.session.loginError=true;
+    req.session.loginError=false;
   }
 
   
 
 })
 
-
 router.post('/login',(req,res,next)=>{ 
   userHelpers.login(req.body).then((response)=>{
     if(response.status){
       req.session.userLoggedIn=true;
       req.session.user=response.user
-      console.log("log data" +req.session.user);
+      console.log("log data"+req.session.user);
       res.redirect('/')
     }else{
+      req.session.loginError=true
       req.session.err=true
       res.redirect('/')
     }

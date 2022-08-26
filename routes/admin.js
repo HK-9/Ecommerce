@@ -18,7 +18,7 @@ router.get("/", function (req, res, next) {
   if(req.session.adminLoggedIn){
     userHelper.getAllUsers().then((users) => {
       console.log(users);
-      res.render("admin/admin-usersPanel", { users});
+      res.render("admin/admin-usersPanel", { users,loyout:'dataTable'});
       console.log(req.body);
     });
   }else{
@@ -46,23 +46,38 @@ router.post("/", (req, res) => {
 
 router.get("/delete-user/:id", (req, res) => {
   let userId = req.params.id;
+  if (req.session.user._id == userId) {
+
+    req.session.userLoggedIn=false
+
+  }
+
   userHelper.deleteUser(userId).then((response) => {
     if(req.session.adminLoggedIn){
     res.redirect("/admin");  
+    }else{
+      res.status(404).send('404 Access Denied');
     }
+    
   });
 });
 
 router.get("/edit-user/:id",async(req,res)=>{       //EDIT USER
   let avatar=await userHelper.getUsers(req.params.id)
   console.log(avatar)
+  if(req.session.adminLoggedIn){
   res.render('admin/admin-editUser',{avatar})
+  }else{
+    res.status(404).send('404 Access Denied');
+  }
 })
 
 router.post("/admin-updateUser/:id",(req,res)=>{ 
     userHelper.updateUser(req.params.id,req.body).then(()=>{
       if(req.session.adminLoggedIn){
       res.redirect('/admin')
+      }else{
+        res.status(404).send('404 Access Denied');
       }
     })
 })
@@ -71,7 +86,11 @@ router.get('/add/goback'),(req,res)=>{
 }
 
 router.get("/admin-addUser", (req, res, next) => {
+  if(req.session.adminLoggedIn){
   res.render("admin/admin-addUser");
+  }else{
+    res.status(404).send('404 Access Denied');
+  }
 });
 
 router.post("/admin-submitUser", (req, res, next) => {
@@ -79,6 +98,8 @@ router.post("/admin-submitUser", (req, res, next) => {
     console.log(resonse);
     if(req.session.adminLoggedIn){
     res.redirect("/admin");
+    }else{
+      res.status(404).send('404 Access Denied');
     }
   });
 });

@@ -27,12 +27,9 @@
 
               <a href='/admin/edit-user/{{this._id}}' class="btn btn-secondary ms-2" onclick="return 
               confirm('Are you Sure want to edit {{this._userName}}?')">Edit</a>
-
-              <a href="/admin/delete-user/{{ this._id}}" class="btn btn-danger"
-                onclick="return confirm('Are you Sure want to
-                delete {{this.userName}}?')">Remove</a>
-            </td>
             {{!-- </form> --}}
+              <a class="btn btn-danger" href="/admin/delete-user/{{this._id}}" onclick="return confirm('Are you sure you want to Delete {{this.username}} ?')">Delete</a>
+             </td>
   
         </tr>
         {{/each}}
@@ -42,6 +39,6 @@
 </section>
 <script>
   $(document).ready( function () {
-    $('usersTable').DataTable();
+    $('#usersTable').DataTable();
 } );
 </script>
